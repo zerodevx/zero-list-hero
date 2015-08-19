@@ -15,6 +15,7 @@ Basic usage:
 
 ```html
 <link rel="import" href="bower_components/zero-list-hero/zero-list-hero.html">
+...
 
 <zero-list-hero>
   <!-- Dynamically append/remove elements inside here -->
