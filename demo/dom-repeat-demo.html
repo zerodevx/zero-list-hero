@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>&lt;zero-list-hero&gt; dom-repeat demo</title>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
+
+  <link rel="import" href="../zero-list-hero.html">
+  <link rel="import" href="simple-card.html">
+</head>
+
+<body unresolved class="fullbleed">
+  <style>
+    .btn { font-size: 16px; height: 32px; }
+  </style>
+
+  <h3>&lt;zero-list-hero&gt; dom-repeat demo</h3>
+  <button id="btn_add" class="btn">Add</button>
+  <button id="btn_remove" class="btn">Remove</button>
+  <button id="btn_update" class="btn">Update</button>
+  <button id="btn_reorder" class="btn">Sort</button><br><br>
+
+  <template id="tpl" is="dom-bind">
+
+    <zero-list-hero id="hero">
+      <template id="repeat" is="dom-repeat" items="{{list}}" sort="sort">
+        <simple-card hero-id$="{{item.foo}}" foo$="{{item.foo}}" bar$="{{item.bar}}"></simple-card>
+      </template>
+    </zero-list-hero>
+
+  </template>
+
+  <script>
+
+    var app = {};
+    var tpl = {};
+
+    function getRand(min, max) {
+      return (Math.floor(Math.random() * (max - min + 1)) + min);
+    }
+
+    //window.addEventListener("WebComponentsReady", function (e) {
+    HTMLImports.whenReady(function () {
+      tpl = document.querySelector("#tpl");
+      tpl.list = [
+        { foo: getRand(0, 999999).toString(), bar: getRand(0, 999999).toString() },
+        { foo: getRand(0, 999999).toString(), bar: getRand(0, 999999).toString() },
+        { foo: getRand(0, 999999).toString(), bar: getRand(0, 999999).toString() },
+      ];
+      tpl.sortmode = 0;
+      tpl.sort = function (a, b) {
+        if (this.sortmode == 0) return 0;
+        if (this.sortmode == 1) {
+          if (a.foo < b.foo) return -1;
+          if (a.foo > b.foo) return 1;
+          return 0;
+        }
+        if (this.sortmode == 2) {
+          if (a.bar < b.bar) return -1;
+          if (a.bar > b.bar) return 1;
+          return 0;
+        }
+      };
+    });
+
+    window.addEventListener("dom-change", function (e) {
+      app = document.querySelector("#hero");
+    });
+
+    document.querySelector("#btn_add").addEventListener("click", function (e) {
+      tpl.splice("list", getRand(0, tpl.list.length - 1), 0, {
+        foo: getRand(0, 999999).toString(),
+        bar: getRand(0, 999999).toString()
+      });
+    });
+
+    document.querySelector("#btn_remove").addEventListener("click", function (e) {
+      tpl.splice("list", getRand(0, tpl.list.length - 1), 1);
+    });
+
+    document.querySelector("#btn_update").addEventListener("click", function (e) {
+      for (var a = 0, cnt = getRand(1, tpl.list.length); a < cnt; a++) {
+        var b = getRand(0, tpl.list.length - 1).toString();
+        tpl.set("list." + b + ".bar", getRand(0, 999999).toString());
+      }
+    });
+
+    document.querySelector("#btn_reorder").addEventListener("click", function (e) {
+      (tpl.sortmode == 2) ? tpl.sortmode = 0 : tpl.sortmode++;
+      tpl.$.repeat.render();
+    });
+
+  </script>
+
+</body>
+</html>

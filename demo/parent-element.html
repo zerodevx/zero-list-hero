@@ -1,0 +1,83 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../zero-list-hero.html">
+<link rel="import" href="simple-card.html">
+
+<dom-module id="parent-element">
+  <style>
+    .btn { font-size: 16px; height: 32px; }
+  </style>
+
+  <template>
+    <h3>&lt;zero-list-hero&gt; shadow-dom demo</h3>
+    <button id="btn_add" class="btn" on-tap="addTapped">Add</button>
+    <button id="btn_remove" class="btn" on-tap="removeTapped">Remove</button>
+    <button id="btn_update" class="btn" on-tap="updateTapped">Update</button>
+    <button id="btn_reorder" class="btn" on-tap="reorderTapped">Reorder</button><br><br>
+
+    <zero-list-hero id="hero" shadow>
+      <template id="repeat" is="dom-repeat" items="{{list}}" sort="tplSort">
+        <simple-card hero-id$="{{item.foo}}" foo$="{{item.foo}}" bar$="{{item.bar}}"></simple-card>
+      </template>
+    </zero-list-hero>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "parent-element",
+      properties: {
+        list: { type: Object, value: function () { return []; } },
+        sortmode: { type: Number, value: 0 }
+      },
+      observers: [
+        "listChanged(list.*)"
+      ],
+      ready: function () {
+        this.push("list", { foo: this.getRand(0, 999999).toString(), bar: this.getRand(0, 999999).toString() });
+        this.push("list", { foo: this.getRand(0, 999999).toString(), bar: this.getRand(0, 999999).toString() });
+        this.push("list", { foo: this.getRand(0, 999999).toString(), bar: this.getRand(0, 999999).toString() });
+      },
+      getRand: function (min, max) {
+        return (Math.floor(Math.random() * (max - min + 1)) + min);
+      },
+      listChanged: function (changeRecord) {
+        this.$.hero.animate();
+      },
+      addTapped: function () {
+        this.splice("list", this.getRand(0, this.list.length - 1), 0, {
+          foo: this.getRand(0, 999999).toString(),
+          bar: this.getRand(0, 999999).toString()
+        });
+      },
+      removeTapped: function () {
+        this.splice("list", this.getRand(0, this.list.length - 1), 1);
+      },
+      updateTapped: function () {
+        for (var a = 0, cnt = this.getRand(1, this.list.length); a < cnt; a++) {
+          this.set("list." + this.getRand(0, this.list.length - 1).toString() + ".bar", this.getRand(0, 999999).toString());
+        }
+      },
+      reorderTapped: function () {
+        (this.sortmode == 2) ? this.sortmode = 0 : this.sortmode++;
+        this.$.repeat.render();
+        this.async(function () {
+          this.$.hero.animate();
+        });
+      },
+      tplSort: function (a, b) {
+        if (this.sortmode == 0) return 0;
+        if (this.sortmode == 1) {
+          if (a.foo < b.foo) return -1;
+          if (a.foo > b.foo) return 1;
+          return 0;
+        }
+        if (this.sortmode == 2) {
+          if (a.bar < b.bar) return -1;
+          if (a.bar > b.bar) return 1;
+          return 0;
+        }
+      }
+
+    });
+  </script>
+</dom-module>

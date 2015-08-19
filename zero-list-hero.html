@@ -1,0 +1,246 @@
+<!--
+The MIT License (MIT)
+
+Copyright (c) 2015 Jason JC Lee <zerodevx@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../neon-animation/neon-animation-behavior.html">
+<link rel="import" href="../neon-animation/web-animations.html">
+<link rel="import" href="../neon-animation/animations/hero-animation.html">
+<link rel="import" href="../neon-animation/animations/cascaded-animation.html">
+
+<dom-module id="zero-animatable-wrap">
+  <template><content></content></template>
+</dom-module>
+
+<dom-module id="zero-list-hero">
+  <template>
+    <div id="content_wrap" hidden>
+      <content id="content" select="[hero-id]"></content>
+    </div>
+
+    <neon-animated-pages id="pages" attr-for-selected="page" selected="data0" on-neon-animation-finish="_onNeonAnimationFinish" style="position:relative">
+      <zero-animatable-wrap id="data0" page="data0">
+      </zero-animatable-wrap>
+      <zero-animatable-wrap id="data1" page="data1">
+      </zero-animatable-wrap>
+    </neon-animated-pages>
+
+  </template>
+</dom-module>
+
+<script>
+  (function () {
+
+    Polymer({
+      is: "zero-entry-animation",
+      behaviors: [Polymer.NeonAnimationBehavior],
+      configure: function(config) {
+        var node = config.node;
+        this._effect = new KeyframeEffect(node, [
+          {'opacity': '0.0', 'transform': 'translate(-4vw, 16vh) rotate(8deg)'},
+          {'opacity': '1.0', 'transform': 'translate(0px, 0px) rotate(0deg)'}
+        ], this.timingFromConfig(config));
+        return this._effect;
+      }
+    });
+
+    Polymer({
+      is: "zero-exit-animation",
+      behaviors: [Polymer.NeonAnimationBehavior],
+      configure: function(config) {
+        var node = config.node;
+        this._effect = new KeyframeEffect(node, [
+          {'opacity': '1.0', 'transform': 'translate(0px, 0px) rotate(0deg)'},
+          {'opacity': '0.0', 'transform': 'translate(4vw, -16vh) rotate(8deg)'}
+        ], this.timingFromConfig(config));
+        return this._effect;
+      }
+    });
+
+    Polymer({
+      is: "zero-animatable-wrap",
+      behaviors: [Polymer.NeonSharedElementAnimatableBehavior]
+    });
+
+    Polymer({
+      is: "zero-list-hero",
+      properties: {
+        debounceDelay: { type: Number, value: 500 },
+        cascadeDelay: { type: Number, value: 50 },
+        addAnimation: { type: String, value: "zero-entry-animation" },
+        removeAnimation: { type: String, value: "zero-exit-animation" },
+        shadow: { type: Boolean, value: false },
+        inTransit: { type: Boolean, value: false, notify: true, readOnly: true },
+        _observer: { type: Object, value: function () { return {}; } },
+        _activePage: { type: String, value: "data0" },
+        _inactivePage: { type: String, value: "data1" }
+      },
+      ready: function () {
+        this._resetAnimationConfigs();
+        if (!this.shadow) { this._startObserving(); }
+        this.animate();
+      },
+      detached: function () {
+        if (!this.shadow) { this._observer.disconnect(); }
+      },
+      _resetAnimationConfigs: function () {
+        this.$.data0.animationConfig = {
+          entry: [{
+            name: "cascaded-animation",
+            nodes: [],
+            animation: this.addAnimation,
+            nodeDelay: this.cascadeDelay
+          }],
+          exit: [{
+            name: "cascaded-animation",
+            nodes: [],
+            animation: this.removeAnimation,
+            nodeDelay: this.cascadeDelay
+          }]
+        };
+        this.$.data1.animationConfig = {
+          entry: [{
+            name: "cascaded-animation",
+            nodes: [],
+            animation: this.addAnimation,
+            nodeDelay: this.cascadeDelay
+          }],
+          exit: [{
+            name: "cascaded-animation",
+            nodes: [],
+            animation: this.removeAnimation,
+            nodeDelay: this.cascadeDelay
+          }]
+        };
+        this.$.data0.sharedElements = {};
+        this.$.data1.sharedElements = {};
+      },
+      _startObserving: function () {
+        // MutationObserver works only in shady dom
+        // var closest = function (el, fn) { return el && (fn(el) ? el : closest(el.parentElement, fn)); };
+        var self = this;
+        this._observer = new MutationObserver(function (mutations) {
+          self.animate();
+        });
+        this._observer.observe(this.$.content_wrap, {
+          childList: true,
+          attributes: true,
+          attributeFilter: ["hero-id"],
+          characterData: true,
+          subtree: true
+        });
+      },
+      _clonePage: function () { //returns true if hero needs to be performed
+        // Ideally we want to use `.getDistributedNodes()` to retrieve content nodes - however, the
+        // issue with `.getDistributedNodes()` is that it does not return the correct set of nodes when
+        // a remove operation is performed. (https://github.com/Polymer/polymer/issues/2283) As a
+        // workaround, we try using `.children` (which does not work in shadow dom) first.
+        var nodes = this.$.content_wrap.children;
+        if (nodes.length && (nodes[0].tagName === "CONTENT")) { //detect shadow behavior
+          nodes = Polymer.dom(this.$.content).getDistributedNodes();
+        }
+        var activeNodes = Polymer.dom(this.$[this._activePage]).childNodes;
+        var hero = false;
+        if (nodes.length !== activeNodes.length) {
+          hero = true;
+        } else {
+          for (var a = 0; a < nodes.length - 1; a++) {
+            if (nodes[a].getAttribute("hero-id") !== activeNodes[a].getAttribute("hero-id")) {
+              hero = true;
+              break;
+            }
+          }
+        }
+        var target = hero ? Polymer.dom(this.$[this._inactivePage]) : Polymer.dom(this.$[this._activePage]);
+        while (target.firstChild) {
+          target.removeChild(target.firstChild);
+        }
+        Array.prototype.forEach.call(nodes, function (node) {
+          target.appendChild(node.cloneNode(true));
+        }.bind(this));
+        return hero;
+      },
+      _configureAnimations: function () {
+        var active = this.$[this._activePage];
+        var inactive = this.$[this._inactivePage];
+        var nodes = Polymer.dom(active).querySelectorAll("[hero-id]");
+        nodes.forEach(function (node) {
+          var heroid = node.getAttribute("hero-id");
+          var target = Polymer.dom(inactive).querySelector("[hero-id='" + heroid + "']");
+          if (target) {
+            active.animationConfig.exit.push({
+              name: "hero-animation",
+              id: heroid,
+              fromPage: active
+            });
+            inactive.animationConfig.entry.push({
+              name: "hero-animation",
+              id: heroid,
+              toPage: inactive
+            });
+            active.sharedElements[heroid] = node;
+            inactive.sharedElements[heroid] = target;
+          } else {
+            active.animationConfig.exit[0].nodes.push(node);
+          }
+        });
+        nodes = Polymer.dom(inactive).querySelectorAll("[hero-id]");
+        nodes.forEach(function (node) {
+          var heroid = node.getAttribute("hero-id");
+          var target = Polymer.dom(active).querySelector("[hero-id='" + heroid + "']");
+          if (!target) {
+            inactive.animationConfig.entry[0].nodes.push(node);
+          }
+        });
+      },
+      _playAnimation: function () {
+        this._configureAnimations();
+        this.$.pages.selected = this._inactivePage;
+      },
+      _onNeonAnimationFinish: function () {
+        //console.log("neon-animation-finish");
+        this._resetAnimationConfigs();
+        var temp = this._activePage;
+        this._activePage = this._inactivePage;
+        this._inactivePage = temp;
+        this._setInTransit(false);
+      },
+      animate: function () {
+        this.debounce("animate-job", function () {
+          this._setInTransit(true);
+          if (this._clonePage()) {
+            this.async(function () { //ensure dom writes are complete
+              this._playAnimation();
+            });
+          } else {
+            this._setInTransit(false);
+          }
+        }, this.debounceDelay);
+      }
+    });
+
+  })();
+</script>
