@@ -1,0 +1,24 @@
+{
+  "name": "zero-list-hero-demos",
+  "version": "0.1.0",
+  "authors": [
+    "Jason JC Lee <zerodevx@gmail.com>"
+  ],
+  "description": "Suite of demos for zero-list-hero.",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "hero",
+    "animation"
+  ],
+  "main": "index.html",
+  "license": "https://github.com/zerodevx/zero-list-hero/blob/master/LICENSE.txt",
+  "homepage": "https://github.com/zerodevx/zero-list-hero/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "zero-list-hero": "zerodevx/zero-list-hero#^0.1.0"
+  }
+}

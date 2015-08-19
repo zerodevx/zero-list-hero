@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>&lt;zero-list-hero&gt; simple demo</title>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <!--<script>
+    window.Polymer = window.Polymer || {};
+    window.Polymer.dom = "shadow";
+  </script>-->
+
+  <link rel="import" href="../zero-list-hero.html">
+</head>
+
+<body unresolved class="fullbleed">
+  <style>
+    .btn { font-size: 16px; height: 32px; }
+    body /deep/ .card {
+      display: block;
+      height: 32px;
+      border: 1px solid black;
+      text-align: center;
+      font-size: 20px;
+    }
+  </style>
+
+  <h3>&lt;zero-list-hero&gt; simple demo</h3>
+  <button id="btn_add" class="btn">Add</button>
+  <button id="btn_remove" class="btn">Remove</button>
+  <button id="btn_update" class="btn">Update</button>
+  <button id="btn_reorder" class="btn">Reorder</button><br><br>
+
+  <zero-list-hero id="hero">
+    <div hero-id="tom" class="card" style="background-color: red">I'm Tom</div>
+    <div hero-id="mary" class="card" style="background-color: green">I'm Mary</div>
+    <div hero-id="john" class="card" style="background-color: yellow">I'm John</div>
+  </zero-list-hero>
+
+  <script>
+
+    var app = document.querySelector("#hero");
+
+    function getRand(min, max) {
+      return (Math.floor(Math.random() * (max - min + 1)) + min);
+    }
+
+    function getRandColor() {
+      switch(getRand(0, 4)) {
+        case 0: return "red"; break;
+        case 1: return "blue"; break;
+        case 2: return "green"; break;
+        case 3: return "yellow"; break;
+        default: return "pink";
+      }
+    }
+
+    document.querySelector("#btn_add").addEventListener("click", function (e) {
+      var el = document.createElement("div");
+      var heroId = getRand(0, 9999999).toString();
+      el.setAttribute("hero-id", heroId);
+      el.style.backgroundColor = getRandColor();
+      el.classList.add("card");
+      el.innerHTML = "I'm " + heroId;
+      var nodes = document.querySelectorAll("[hero-id]:not(.zero-list-hero)");
+      var a = getRand(0, nodes.length - 1);
+      if (a === nodes.length - 1) {
+        Polymer.dom(app).appendChild(el);
+      } else {
+        Polymer.dom(app).insertBefore(el, nodes[a]);
+      }
+    });
+
+    document.querySelector("#btn_remove").addEventListener("click", function (e) {
+      var nodes = document.querySelectorAll("#hero [hero-id]:not(.zero-list-hero)");
+      var target = nodes[getRand(0, nodes.length - 1)];
+      Polymer.dom(app).removeChild(target);
+    });
+
+    document.querySelector("#btn_update").addEventListener("click", function (e) {
+      var nodes = document.querySelectorAll("#hero [hero-id]:not(.zero-list-hero)");
+      var target = nodes[getRand(0, nodes.length - 1)];
+      target.innerHTML += " :)";
+    });
+
+    document.querySelector("#btn_reorder").addEventListener("click", function (e) {
+      var nodes = document.querySelectorAll("#hero [hero-id]:not(.zero-list-hero)");
+      var a = nodes[getRand(0, nodes.length - 1)];
+      var b = nodes[getRand(0, nodes.length - 1)];
+      var clone = a.cloneNode(true);
+      Polymer.dom(app).insertBefore(clone, b);
+      Polymer.dom(app).removeChild(a);
+    });
+
+  </script>
+
+</body>
+</html>

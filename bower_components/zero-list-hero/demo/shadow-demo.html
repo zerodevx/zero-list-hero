@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>&lt;zero-list-hero&gt; shadow-dom demo</title>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    window.Polymer = window.Polymer || {};
+    window.Polymer.dom = "shadow";
+  </script>
+
+  <link rel="import" href="parent-element.html">
+</head>
+
+<body unresolved class="fullbleed">
+
+  <parent-element id="app"></parent-element>
+
+  <script>
+    var app = document.querySelector("#app");
+  </script>
+</body>
+</html>
