@@ -14,6 +14,8 @@ Newsstand app; configurable animations; and almost entirely declarative.
 Basic usage:
 
 ```html
+<link rel="import" href="bower_components/zero-list-hero/zero-list-hero.html">
+
 <zero-list-hero>
   <!-- Dynamically append/remove elements inside here -->
   ...
@@ -155,15 +157,14 @@ Included demos:
 
 Install through bower.
 
-    bower install --save zerodevx/zero-list-hero^#0.1.0
+    bower install --save zerodevx/zero-list-hero#^0.1.0
 
 Alternatively, download the project as a ZIP file and unpack into your
 components directory. Note that `zero-list-hero` depends on `Polymer`, Polymer
 Element's `neon-animation` as well as their related dependencies.
 
-Source is provided as-is - no assumptions are made on your production
-build workflow so vulcanise/minify/obfuscate/whateverTask to your heart's
-content.
+Source provided as-is - no assumptions are made on your production build
+workflow so vulcanise/minify/obfuscate/whateverTask to your heart's content.
 
 
 ### Version history
