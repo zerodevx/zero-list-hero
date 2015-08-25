@@ -2,22 +2,26 @@
   "name": "zero-list-hero",
   "version": "0.1.0",
   "authors": [
-    "Jason JC Lee <zerodevx@gmail.com>"
+    "Jason Lee <zerodevx@gmail.com>"
   ],
   "description": "It's hero time! A Polymer 1.0+ web component that hero-animates a sequence of elements.",
   "keywords": [
-    "web-component",
     "polymer",
+    "web-components",
+    "animations",
+    "transitions",
+    "neon-animation",
+    "web-animations",
     "hero",
-    "animation"
+    "hero-animation"
   ],
   "main": "zero-list-hero.html",
-  "license": "https://github.com/zerodevx/zero-list-hero/blob/master/LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zerodevx/zero-list-hero.git"
+  },
+  "license": "https://github.com/zerodevx/zero-list-hero/blob/master/LICENSE.txt",
   "homepage": "https://github.com/zerodevx/zero-list-hero/",
-  "ignore": [
-    "/.*",
-    "/test/"
-  ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
     "neon-animation": "PolymerElements/neon-animation#^1.0.0"
