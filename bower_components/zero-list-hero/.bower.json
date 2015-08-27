@@ -29,7 +29,6 @@
     "commit": "418e97bd33b99dda43ea3e4b6097d14e57177ffb"
   },
   "_source": "git://github.com/zerodevx/zero-list-hero.git",
-  "_target": "~0.1.0",
-  "_originalSource": "zerodevx/zero-list-hero",
-  "_direct": true
+  "_target": "^0.1.0",
+  "_originalSource": "zerodevx/zero-list-hero"
 }

@@ -1,0 +1,237 @@
+<!--
+The MIT License (MIT)
+
+Copyright (c) 2015 Jason JC Lee <zerodevx@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="bower_components/paper-item/paper-item.html">
+<link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="bower_components/paper-toast/paper-toast.html">
+
+<link rel="import" href="bower_components/zero-list-hero/zero-list-hero.html">
+<link rel="import" href="news-card.html">
+
+<dom-module id="newsreader-app">
+  <style>
+    :host { background-color: #f1f1f1; color: #424242; }
+    #loader { position: fixed; top: 50%; left: 50%; margin-top: -14px; margin-left: -14px; }
+    .toolbar { background-color: transparent; }
+    #header {
+      --paper-scroll-header-panel-full-header: {
+        background-color: #212121;
+      };
+      --paper-scroll-header-panel-condensed-header: {
+        background-color: #304FFE;
+      }
+    }
+  </style>
+  <template>
+    <iron-ajax id="feed" auto url="http://crossorigin.me/http://ajax.googleapis.com/ajax/services/search/news" params="{{computeParams(query)}}" on-response="handleResponse"></iron-ajax>
+
+    <paper-scroll-header-panel id="header" class="fit" condenses>
+      <paper-toolbar class="toolbar tall" bottom-justify="end">
+        <paper-icon-button icon="menu" on-tap="abtTapped"></paper-icon-button>
+        <div class="title flex">Newsreader App</div>
+        <paper-icon-button icon="search" on-tap="searchTapped"></paper-icon-button>
+        <paper-menu-button id="dropdown" horizontal-align="right" vertical-align="top">
+          <paper-icon-button icon="more-vert" class="dropdown-trigger"></paper-icon-button>
+          <paper-menu class="dropdown-content">
+            <paper-item on-tap="moreTapped">Load more items</paper-item>
+            <paper-item on-tap="removeTapped">Remove</paper-item>
+          </paper-menu>
+        </paper-menu-button>
+      </paper-toolbar>
+      <div>
+
+        <!-- it's hero time! -->
+        <zero-list-hero id="hero" shadow on-news-card-fav="favTapped" on-news-card-tapped="itemTapped">
+          <template id="repeat" is="dom-repeat" items="{{list}}" sort="sortList">
+            <news-card hero-id$="{{item.recent}}" headline$="{{item.headline}}" publisher$="{{item.publisher}}" pic$="{{item.pic}}" recent$="{{item.recent}}" fav$="{{item.fav}}"></news-card>
+          </template>
+        </zero-list-hero>
+
+      </div>
+    </paper-scroll-header-panel>
+
+    <paper-dialog id="search" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation" on-iron-overlay-closed="searchClosed">
+      <h2>Search for more news</h2>
+      <div>
+        <p>Find headlines by entering your search query below.</p>
+        <p>New items are automatically added into the main page.</p>
+        <paper-input id="search_inp" label="Search for..."><paper-icon-button suffix icon="clear" on-tap="clearInput"></paper-icon-button></paper-input>
+      </div>
+      <div class="buttons">
+        <paper-button dialog-dismiss>CANCEL</paper-button>
+        <paper-button dialog-confirm on-tap="newQuery">SEARCH</paper-button>
+      </div>
+    </paper-dialog>
+
+    <paper-dialog id="about" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+      <h2>Newsreader App Demo</h2>
+      <paper-dialog-scrollable>
+        <p>Go crazy with Material Design!</p>
+        <p>App written in ~1 hour with ~200 lines of code. Demonstrates use of <b>&lt;zero-list-hero&gt;</b> in creating cool card effects on the web declaratively with zero effort, zero fuss.</p>
+        <p>Check out the repo in <a href="https://github.com/zerodevx/zero-list-hero">https://github.com/zerodevx/zero-list-hero</a>!</p>
+        <p>More demos in <a href="http://zerodevx.github.io/zero-list-hero/demos.html">http://zerodevx.github.io/zero-list-hero/demos.html</a>.</p>
+        <br><p>The MIT License</p><p>Copyright &copy; Jason Lee &lt;zerodevx@gmail.com&gt;</p>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button dialog-dismiss>OK</paper-button>
+      </div>
+    </paper-dialog>
+
+    <paper-spinner id="loader" active></paper-spinner>
+
+    <paper-toast id="toast" duration="999999">
+      <div class="layout horizontal">
+        <div class="flex">Tap an item to remove it. Close when done.</div>
+        <paper-icon-button icon="clear" on-tap="closeDelete"></paper-icon-button>
+      </div>
+    </paper-toast>
+
+  </template>
+</dom-module>
+
+<script>
+  (function () {
+    Polymer({
+      is:"newsreader-app",
+      properties: {
+        params: { type: Object, value: function () { return {
+          v: "1.0",
+          q: "",
+          rsz: "small",
+          start: 0
+        }; } },
+        query: { type: String, value: "singapore" },
+        list: { type: Array, value: function () { return []; } },
+        deleteMode: { type: Boolean, value: false }
+      },
+      //attached: function () { window.setInterval(function () { this.updateHeader(); }.bind(this), 5000); },
+      updateHeader: function () {
+        if (this.list.length > 0) {
+          var rand = Math.floor(Math.random() * this.list.length);
+          this.$.header.$.headerBg.style.background = "linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('" + this.list[rand].fullpic + "')";
+          this.$.header.$.headerBg.style.backgroundRepeat = "no-repeat";
+          this.$.header.$.headerBg.style.backgroundPosition = "center center";
+          this.$.header.$.headerBg.style.backgroundSize = "cover";
+        }
+      },
+      sortList: function (a, b) {
+        if (a.fav > b.fav) return -1;
+        if (a.fav < b.fav) return 1;
+        if (a.recent > b.recent) return -1;
+        if (a.recent < b.recent) return 1;
+        return 0;
+      },
+      computeParams: function (q) {
+        this.params.q = q;
+        return this.params;
+      },
+      computeDate: function (d) {
+        var date = new Date(d);
+        return date.getTime();
+      },
+      decodeHtml: function (str) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = str;
+        return txt.value;
+      },
+      handleResponse: function () {
+        this.$.loader.active = false;
+        var results = this.$.feed.lastResponse.responseData.results;
+        //console.log(results);
+        Array.prototype.forEach.call(results, function (r) {
+          this.push("list", {
+            headline: this.decodeHtml(r.titleNoFormatting),
+            fav: 0,
+            publisher: r.publisher,
+            pic: r.image ? r.image.tbUrl : "",
+            fullpic: r.image ? r.image.url : "",
+            recent: this.computeDate(r.publishedDate)
+          });
+        }.bind(this));
+        this.async(function () {
+          this.$.hero.animate();
+          this.updateHeader();
+        });
+      },
+      clearInput: function () { this.$.search_inp.value = ""; },
+      searchTapped: function () { this.$.search.open(); },
+      searchClosed: function () { this.clearInput(); },
+      newQuery: function () {
+        if (!this.$.search_inp.value) return;
+        this.$.loader.active = true;
+        this.query = this.$.search_inp.value;
+        this.params.start = 0;
+        this.$.feed.generateRequest();
+      },
+      favTapped: function (e) {
+        for (var a = 0; a < this.list.length; a++) {
+          if (this.list[a].recent == e.detail.recent) {
+            this.set(["list", a, "fav"], (this.list[a].fav > 0) ? 0 : Date.now());
+            this.$.repeat.render();
+            this.$.hero.animate();
+            break;
+          }
+        }
+      },
+      moreTapped: function () {
+        this.params.start += 4;
+        this.$.feed.generateRequest();
+      },
+      abtTapped: function () { this.$.about.open(); },
+      removeTapped: function () {
+        this.$.toast.show();
+        this.deleteMode = true;
+      },
+      closeDelete: function () {
+        this.$.toast.hide();
+        this.deleteMode = false;
+      },
+      itemTapped: function (e) {
+        if (!this.deleteMode) return;
+        for (var a = 0; a < this.list.length; a++) {
+          if (this.list[a].recent == e.detail.recent) {
+            this.splice("list", a, 1);
+            this.$.hero.animate();
+            break;
+          }
+        }
+      }
+    });
+  })();
+</script>

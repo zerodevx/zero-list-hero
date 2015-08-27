@@ -1,0 +1,74 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="bower_components/iron-image/iron-image.html">
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-material/paper-material.html">
+
+<dom-module id="news-card">
+  <template>
+    <style>
+      :host { display: block; }
+      .container { width: 100%; background-color: transparent; }
+      .card { box-sizing: border-box; width: 94%; height: 96px; margin: 16px auto; background-color: #fff; color: #424242; }
+      .header { margin: 0; padding: 4px 8px 0px 8px; font-size: 18px; height: 46px; overflow: hidden; text-overflow: ellipsis; }
+      .footer { margin: 0px; height: 50px; font-size: 14px; font-weight: 200; overflow: hidden; background-color: transparent; }
+      .detail { white-space: nowrap; color: #757575; overflow: hidden; }
+      #icon { margin: 0; font-size: 16px; color: #fff; stroke: #757575; }
+      .recent { font-style: italic; padding-right: 8px; }
+      .img { width: 96px; height: 96px; background-color: lightgray; }
+    </style>
+
+    <div class="container">
+      <paper-material class="card layout horizontal" elevation="2" on-tap="cardTapped">
+        <div class="flex layout vertical">
+          <div class="header">{{headline}}</div>
+          <div class="footer layout horizontal center">
+            <paper-icon-button id="icon" icon="star" on-tap="favTapped"></paper-icon-button>
+            <div class="detail flex">{{publisher}}</div>
+            <div class="detail recent"><i>{{timeSince(recent)}}</i></div>
+          </div>
+        </div>
+        <iron-image preload class="img" sizing="cover" src="{{pic}}"></iron-image>
+      </paper-material>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "news-card",
+    properties: {
+      headline: String,
+      detail: String,
+      pic: String,
+      fav: { type: Number, value: 0, observer: "favChanged" },
+      publisher: String,
+      recent: Number
+    },
+    timeSince: function (date) {
+      var seconds = Math.floor((Date.now() - date) / 1000);
+      var interval = Math.floor(seconds / 31536000);
+      if (interval >= 1) { return (interval == 1) ? "last year" : interval + " years ago"; }
+      interval = Math.floor(seconds / 2592000);
+      if (interval >= 1) { return (interval == 1) ? "last month" : interval + " months ago"; }
+      interval = Math.floor(seconds / 86400);
+      if (interval >= 1) { return (interval == 1) ? "yesterday" : interval + " days ago"; }
+      interval = Math.floor(seconds / 3600);
+      if (interval >= 1) { return (interval == 1) ? "an hour ago" : interval + " hours ago"; }
+      interval = Math.floor(seconds / 60);
+      if (interval >= 1) { return (interval == 1) ? "a minute ago" : interval + " minutes ago"; }
+      //return Math.floor(seconds) + " seconds";
+      return "Just";
+    },
+    favChanged: function () {
+      this.$.icon.style.color = (this.fav > 0) ? " #FFF176" : "transparent";
+    },
+    favTapped: function (e) {
+      e.stopPropagation();
+      this.fire("news-card-fav", {recent: this.recent});
+    },
+    cardTapped: function (e) { this.fire("news-card-tapped", {recent: this.recent}); }
+  });
+</script>
