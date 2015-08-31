@@ -14,6 +14,7 @@ Newsstand app; configurable animations; and almost entirely declarative.
 Basic usage:
 
 ```html
+<script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 <link rel="import" href="bower_components/zero-list-hero/zero-list-hero.html">
 ...
 
@@ -38,7 +39,7 @@ With Polymer's `dom-repeat`:
 ```
 
 
-###Implementation notes
+### Implementation notes
 
 1. Assign a unique `hero-id` for every display element that is wrapped inside
 the `<zero-list-hero>...</zero-list-hero>` tags.
@@ -46,7 +47,7 @@ the `<zero-list-hero>...</zero-list-hero>` tags.
 2. If you're using Polymer's data-binding (eg. inside a `dom-repeat` template),
 set your target attributes annotatively via the ***`$=`*** syntax.
 
-3. Transitions are automatic when changes to any `hero` element are detected.
+3. Transitions are automatic when changes to any `hero` element is detected.
 Multiple mutations are consolidated and debounced with a default delay of 500ms
 (optionally change delay timing by setting `debounce-delay` attribute).
 
@@ -105,9 +106,9 @@ recommended pattern,
 
 ```
 
-To future-proof your application, it is entirely possible to disable
-*MutationObserver* usage by asserting the `shadow` attribute and wire up your
-change observers manually.
+To future-proof your application, it is possible to disable *MutationObserver* 
+usage entirely by asserting the `shadow` attribute and wiring up your change 
+observers manually.
 
 
 ### Other issues
@@ -144,7 +145,7 @@ Included demos:
 | addAnimation    | String  | [Animation](https://github.com/PolymerElements/neon-animation/tree/master/animations) to use when `hero` elements are **added** into view; if unspecified, a special `zero-entry-animation` custom animation is used. |
 | removeAnimation | String  | [Animation](https://github.com/PolymerElements/neon-animation/tree/master/animations) to use when `hero` elements are **removed** from view; if unspecified, a special `zero-exit-animation` custom animation is used. |
 | shadow          | Boolean | If `true`, disables *MutationObserver* usage. Manually call the `animate()` method to trigger the transitions. |
-| inTransit       | Boolean | Read-only convenience property; defaults to `false`. Switches to `true` when a hero-transition is ongoing; goes back to `false` when complete. |
+| inTransit       | Boolean | Read-only convenience property; switches to `true` whenever a hero-transition is ongoing. |
 
 
 ### Public methods
@@ -165,7 +166,7 @@ components directory. Note that `zero-list-hero` depends on `Polymer`, Polymer
 Element's `neon-animation` as well as their related dependencies.
 
 Source provided as-is - no assumptions are made on your production build
-workflow so vulcanise/minify/obfuscate/whateverTask to your heart's content.
+workflow.
 
 
 ### Version history
