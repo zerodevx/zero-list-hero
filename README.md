@@ -2,7 +2,9 @@ v0.1.0
 #`<zero-list-hero>`
 
 It's hero time! A Polymer 1.0+ web component that hero-animates a sequence of
-elements. I do this - just so that you don't have to.
+elements. I do this so you don't have to.
+
+![demo.gif](https://zerodevx.github.io/zero-list-hero/images/demo.gif)
 
 Uses `<neon-animation>` and `web-animations-js`. Automatic transitions with
 built-in debouncer; cascaded bespoke entry-exit effects à la Google Play
