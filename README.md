@@ -1,5 +1,5 @@
 v0.1.0
-#`<zero-list-hero>`
+# `<zero-list-hero>`
 
 It's hero time! A Polymer 1.0+ web component that hero-animates a sequence of
 elements. I do this so you don't have to.
