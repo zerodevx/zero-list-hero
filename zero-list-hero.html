@@ -22,89 +22,140 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
+<!--
+Changes:
+1. replaced <zero-animatable-wrap> with <neon-animatable>
+2. removed workaround for .getDistributedNodes() bug
+3. BREAKING: shadow attribute renamed to manual
+-->
+
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../neon-animation/neon-animatable.html">
 <link rel="import" href="../neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="../neon-animation/neon-shared-element-animatable-behavior.html">
 <link rel="import" href="../neon-animation/neon-animation-behavior.html">
 <link rel="import" href="../neon-animation/web-animations.html">
 <link rel="import" href="../neon-animation/animations/hero-animation.html">
 <link rel="import" href="../neon-animation/animations/cascaded-animation.html">
-
-<dom-module id="zero-animatable-wrap">
-  <template><content></content></template>
-</dom-module>
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../polymer-style-modules/iron-flex-layout-styles.html">
 
 <dom-module id="zero-list-hero">
   <template>
-    <div id="content_wrap" hidden>
-      <content id="content" select="[hero-id]"></content>
-    </div>
-
+    <style include="iron-flex-layout-styles"></style>
+    <style>
+      :host { width: 100%; }
+      #content_wrap[offscreen] { position: fixed; right: 9999px; display: inline; }
+      .zero-list-hero-item {
+        @apply(--zero-list-hero-item-mixin);
+      }
+    </style>
+    <div id="content_wrap" offscreen$="[[_computeLayout(layout)]]" hidden$="[[!_computeLayout(layout)]]"><content id="content" select="[hero-id]"></content></div>
     <neon-animated-pages id="pages" attr-for-selected="page" selected="data0" on-neon-animation-finish="_onNeonAnimationFinish" style="position:relative">
-      <zero-animatable-wrap id="data0" page="data0">
-      </zero-animatable-wrap>
-      <zero-animatable-wrap id="data1" page="data1">
-      </zero-animatable-wrap>
+      <neon-animatable id="data0" page="data0"></neon-animatable>
+      <neon-animatable id="data1" page="data1"></neon-animatable>
     </neon-animated-pages>
-
   </template>
 </dom-module>
 
 <script>
   (function () {
-
     Polymer({
       is: "zero-entry-animation",
       behaviors: [Polymer.NeonAnimationBehavior],
       configure: function(config) {
         var node = config.node;
         this._effect = new KeyframeEffect(node, [
-          {'opacity': '0.0', 'transform': 'translate(-4vw, 16vh) rotate(8deg)'},
-          {'opacity': '1.0', 'transform': 'translate(0px, 0px) rotate(0deg)'}
+          {"opacity": "0.0", "transform": "translate(-4vw, 16vh) rotate(8deg)"},
+          {"opacity": "1.0", "transform": "translate(0px, 0px) rotate(0deg)"}
         ], this.timingFromConfig(config));
         return this._effect;
       }
     });
-
     Polymer({
       is: "zero-exit-animation",
       behaviors: [Polymer.NeonAnimationBehavior],
       configure: function(config) {
         var node = config.node;
         this._effect = new KeyframeEffect(node, [
-          {'opacity': '1.0', 'transform': 'translate(0px, 0px) rotate(0deg)'},
-          {'opacity': '0.0', 'transform': 'translate(4vw, -16vh) rotate(8deg)'}
+          {"opacity": "1.0", "transform": "translate(0px, 0px) rotate(0deg)"},
+          {"opacity": "0.0", "transform": "translate(4vw, -16vh) rotate(8deg)"}
         ], this.timingFromConfig(config));
         return this._effect;
       }
     });
-
-    Polymer({
-      is: "zero-animatable-wrap",
-      behaviors: [Polymer.NeonSharedElementAnimatableBehavior]
-    });
-
     Polymer({
       is: "zero-list-hero",
+      behaviors: [Polymer.IronResizableBehavior],
       properties: {
         debounceDelay: { type: Number, value: 500 },
         cascadeDelay: { type: Number, value: 50 },
         addAnimation: { type: String, value: "zero-entry-animation" },
         removeAnimation: { type: String, value: "zero-exit-animation" },
-        shadow: { type: Boolean, value: false },
+        manual: { type: Boolean, value: false },
         inTransit: { type: Boolean, value: false, notify: true, readOnly: true },
+        layout: { type: String, value: "" },
+        layoutOptions: { type: Object, value: function () { return {}; } },
         _observer: { type: Object, value: function () { return {}; } },
-        _activePage: { type: String, value: "data0" },
-        _inactivePage: { type: String, value: "data1" }
+        _active: { type: String, value: "data0" },
+        _inactive: { type: String, value: "data1" },
+        _placed: { type: Array, value: function () { return []; } },
+        _hero: { type: Boolean, value: false }
       },
       ready: function () {
         this._resetAnimationConfigs();
-        if (!this.shadow) { this._startObserving(); }
-        this.animate();
+      },
+      attached: function () {
+        if (this.layout) {
+          if (this.layout === "masonry") {
+            if (!this.layoutOptions.breakpoint) { this.layoutOptions.breakpoint = 300; }
+            this.layoutOptions.columns = this._layout("getMasonryColumns");
+            this.listen(this, "iron-resize", "_onIronResize");
+          } else {
+            console.warn("[zero-list-hero] Invalid layout attribute", this.layout);
+            this.layout = "";
+          }
+        }
+        if (!this.manual) { this._startObserving(); }
+        this.animate(true);
       },
       detached: function () {
-        if (!this.shadow) { this._observer.disconnect(); }
+        if (this.layout) { this.unlisten(this, "iron-resize", "_onIronResize"); }
+        if (!this.manual) { this._observer.disconnect(); }
+      },
+      _computeLayout: function (l) {
+        return Boolean(l);
+      },
+      _layout: function (mode, inp) {
+        switch(mode) {
+          case "findShortest":
+            var min = inp[0];
+            var index = 0;
+            for (var a = 1; a < inp.length; a++) {
+              if (inp[a] < min) {
+                min = inp[a];
+                index = a;
+              }
+            }
+            return index;
+            break;
+          case "getMasonryColumns":
+            var c = Math.floor(this.parentNode.offsetWidth / this.layoutOptions.breakpoint) || 1;
+            var l = this._placed.length || Polymer.dom(this.$.content).getDistributedNodes().length || 1;
+            return (c > l) ? l : c;
+            break;
+          default:
+            console.warn("[zero-list-hero] Invalid syntax in _layout API", o, inp);
+        }
+      },
+      _onIronResize: function (e) {
+        if (this.layout === "masonry") {
+          var c = this._layout("getMasonryColumns");
+          if (this.layoutOptions.columns !== c) {
+            this.animate(true);
+          }
+        }
       },
       _resetAnimationConfigs: function () {
         this.$.data0.animationConfig = {
@@ -153,39 +204,55 @@ SOFTWARE.
           subtree: true
         });
       },
-      _clonePage: function () { //returns true if hero needs to be performed
-        // Ideally we want to use `.getDistributedNodes()` to retrieve content nodes - however, the
-        // issue with `.getDistributedNodes()` is that it does not return the correct set of nodes when
-        // a remove operation is performed. (https://github.com/Polymer/polymer/issues/2283) As a
-        // workaround, we try using `.children` (which does not work in shadow dom) first.
-        var nodes = this.$.content_wrap.children;
-        if (nodes.length && (nodes[0].tagName === "CONTENT")) { //detect shadow behavior
-          nodes = Polymer.dom(this.$.content).getDistributedNodes();
-        }
-        var activeNodes = Polymer.dom(this.$[this._activePage]).childNodes;
+      _checkHero: function (nodes) {
+        if (nodes.length !== this._placed.length) { return true; }
         var hero = false;
-        if (nodes.length !== activeNodes.length) {
-          hero = true;
-        } else {
-          for (var a = 0; a < nodes.length - 1; a++) {
-            if (nodes[a].getAttribute("hero-id") !== activeNodes[a].getAttribute("hero-id")) {
-              hero = true;
-              break;
-            }
+        for (var a = 0; a < nodes.length; a++) {
+          if (nodes[a].getAttribute("hero-id") !== this._placed[a]) {
+            hero = true;
+            break;
           }
         }
-        var target = hero ? Polymer.dom(this.$[this._inactivePage]) : Polymer.dom(this.$[this._activePage]);
-        while (target.firstChild) {
-          target.removeChild(target.firstChild);
-        }
-        Array.prototype.forEach.call(nodes, function (node) {
-          target.appendChild(node.cloneNode(true));
-        }.bind(this));
         return hero;
       },
+      _clearPage: function (page) {
+        var t = this.$[page];
+        while (Polymer.dom(t).firstChild) { Polymer.dom(t).removeChild(Polymer.dom(t).firstChild); }
+      },
+      _clonePage: function (nodes, page) {
+        this._placed = [];
+        var tree = this.create("div");
+        if (this.layout === "masonry") {
+          tree.classList.add("layout", "horizontal");
+          var arr = [];
+          var idx = [];
+          var cols = this._layout("getMasonryColumns");
+          for (var a = 0; a < cols; a++) {
+            arr.push(tree.appendChild(this.create("div")));
+            arr[a].classList.add("flex", "layout", "vertical");
+            idx[a] = 0;
+          }
+          this.layoutOptions.columns = cols;
+          for (var a = 0; a < nodes.length; a++) {
+            var i = this._layout("findShortest", idx);
+            var b = arr[i].appendChild(nodes[a].cloneNode(true));
+            b.classList.add("zero-list-hero-item");
+            this._placed.push(b.getAttribute("hero-id"));
+            idx[i] += nodes[a].offsetHeight;
+          }
+        } else {
+          for (var a = 0; a < nodes.length; a++) {
+            var b = tree.appendChild(nodes[a].cloneNode(true));
+            b.classList.add("zero-list-hero-item");
+            this._placed.push(b.getAttribute("hero"));
+          }
+        }
+        Polymer.dom(this.$[page]).appendChild(tree);
+        this._hero = false;
+      },
       _configureAnimations: function () {
-        var active = this.$[this._activePage];
-        var inactive = this.$[this._inactivePage];
+        var active = this.$[this._active];
+        var inactive = this.$[this._inactive];
         var nodes = Polymer.dom(active).querySelectorAll("[hero-id]");
         nodes.forEach(function (node) {
           var heroid = node.getAttribute("hero-id");
@@ -217,30 +284,39 @@ SOFTWARE.
         });
       },
       _playAnimation: function () {
+        Polymer.dom.flush();
         this._configureAnimations();
-        this.$.pages.selected = this._inactivePage;
+        this.$.pages.selected = this._inactive;
       },
       _onNeonAnimationFinish: function () {
-        //console.log("neon-animation-finish");
         this._resetAnimationConfigs();
-        var temp = this._activePage;
-        this._activePage = this._inactivePage;
-        this._inactivePage = temp;
+        var temp = this._active;
+        this._active = this._inactive;
+        this._inactive = temp;
+        this._hero = false;
         this._setInTransit(false);
+        this._clearPage(this._inactive);
       },
-      animate: function () {
+      animate: function (hero) {
+        if (hero) { this._hero = true; }
         this.debounce("animate-job", function () {
+          if (this.inTransit) {
+            this.animate();
+            return;
+          }
+          var nodes = Polymer.dom(this.$.content).getDistributedNodes();
           this._setInTransit(true);
-          if (this._clonePage()) {
-            this.async(function () { //ensure dom writes are complete
-              this._playAnimation();
-            });
+          if ((this._hero) || (this._checkHero(nodes))) {
+            this._clonePage(nodes, this._inactive);
+            this._playAnimation();
           } else {
+            this._clearPage(this._active);
+            this._clonePage(nodes, this._active);
+            Polymer.dom.flush();
             this._setInTransit(false);
           }
         }, this.debounceDelay);
       }
     });
-
   })();
 </script>

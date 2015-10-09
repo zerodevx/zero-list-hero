@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>&lt;zero-list-hero&gt; masonry layout demo</title>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <!--<script>
+    window.Polymer = window.Polymer || {};
+    window.Polymer.dom = "shadow";
+  </script>-->
+  <link rel="import" href="../../polymer/polymer.html">
+
+  <link rel="import" href="../zero-list-hero.html">
+</head>
+
+<body unresolved class="fullbleed">
+  <style>
+    /*html /deep/ .btn { font-size: 16px; height: 32px; }
+    html /deep/ .card { text-align: center; font-size: 24px; box-sizing: border-box; margin: 4px; border-radius: 24px; display: block;}
+    html /deep/ .red { background-color: red; height: 60px; }
+    html /deep/ .blue { background-color: blue; height: 90px }
+    html /deep/ .green { background-color: green; height: 120px; }
+    html /deep/ .yellow { background-color: yellow; height: 150px; }
+    html /deep/ .pink { background-color: pink; height: 180px; }*/
+    .btn { font-size: 16px; height: 32px; }
+    .card { text-align: center; font-size: 24px; box-sizing: border-box; margin: 4px; border-radius: 24px; display: block;}
+    .red { background-color: red; height: 60px; }
+    .blue { background-color: blue; height: 90px }
+    .green { background-color: green; height: 120px; }
+    .yellow { background-color: yellow; height: 150px; }
+    .pink { background-color: pink; height: 180px; }
+  </style>
+
+  <h3>&lt;zero-list-hero&gt; masonry layout demo (resize me!)</h3>
+  <button id="btn_add" class="btn">Add</button>
+  <button id="btn_remove" class="btn">Remove</button>
+  <button id="btn_update" class="btn">Update</button><br><br>
+
+  <zero-list-hero id="hero" layout="masonry" layout-options='{"breakpoint":"150"}'>
+    <div hero-id="1" class="card red">1</div>
+    <div hero-id="2" class="card blue">2</div>
+    <div hero-id="3" class="card red">3</div>
+    <div hero-id="4" class="card green">4</div>
+    <div hero-id="5" class="card red">5</div>
+    <div hero-id="6" class="card pink">6</div>
+    <div hero-id="7" class="card yellow">7</div>
+    <div hero-id="8" class="card blue">8</div>
+    <div hero-id="9" class="card red">9</div>
+    <div hero-id="10" class="card red">10</div>
+  </zero-list-hero>
+
+  <script>
+
+    var app = document.querySelector("#hero");
+    var cnt = document.querySelectorAll("[hero-id]:not(.zero-list-hero-item)").length;
+
+    function getRand(min, max) {
+      return (Math.floor(Math.random() * (max - min + 1)) + min);
+    }
+
+    function getRandColor() {
+      switch(getRand(0, 4)) {
+        case 0: return "red"; break;
+        case 1: return "blue"; break;
+        case 2: return "green"; break;
+        case 3: return "yellow"; break;
+        default: return "pink";
+      }
+    }
+
+    document.querySelector("#btn_add").addEventListener("click", function (e) {
+      cnt++;
+      var el = document.createElement("div");
+      var heroId = getRand(0, 999999).toString();
+      el.setAttribute("hero-id", heroId);
+      el.classList.add("card", getRandColor());
+      el.innerHTML = cnt.toString();
+      Polymer.dom(app).appendChild(el);
+    });
+
+    document.querySelector("#btn_remove").addEventListener("click", function (e) {
+      var nodes = document.querySelectorAll("#hero [hero-id]:not(.zero-list-hero-item)");
+      var target = nodes[getRand(0, nodes.length - 1)];
+      t = target;
+      console.log(target);
+      Polymer.dom(Polymer.dom(target).parentNode).removeChild(target);
+    });
+
+    document.querySelector("#btn_update").addEventListener("click", function (e) {
+      var nodes = document.querySelectorAll("#hero [hero-id]:not(.zero-list-hero-item)");
+      var target = nodes[getRand(0, nodes.length - 1)];
+      target.innerHTML += " :)";
+    });
+
+  </script>
+
+</body>
+</html>

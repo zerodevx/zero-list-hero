@@ -1,29 +1,30 @@
 {
   "name": "zero-list-hero",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "authors": [
-    "Jason Lee <zerodevx@gmail.com>"
+    "Jason JC Lee <zerodevx@gmail.com>"
   ],
-  "description": "It's hero time! A Polymer 1.0+ web component that hero-animates a sequence of elements.",
+  "description": "It's hero time! A Polymer 1.1+ web component that hero-animates a sequence of elements.",
   "keywords": [
-    "polymer",
     "web-components",
-    "animations",
-    "transitions",
+    "polymer",
     "neon-animation",
-    "web-animations",
     "hero",
-    "hero-animation"
+    "animations",
+    "layout",
+    "masonry"
   ],
   "main": "zero-list-hero.html",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/zerodevx/zero-list-hero.git"
-  },
-  "license": "https://github.com/zerodevx/zero-list-hero/blob/master/LICENSE.txt",
+  "license": "https://github.com/zerodevx/zero-list-hero/blob/master/LICENSE",
   "homepage": "https://github.com/zerodevx/zero-list-hero/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0",
-    "neon-animation": "PolymerElements/neon-animation#^1.0.0"
+    "polymer": "Polymer/polymer#^1.1.0",
+    "neon-animation": "PolymerElements/neon-animation#^1.0.0",
+    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^1.0.0",
+    "polymer-style-modules": "zerodevx/polymer-style-modules#^1.0.0"
   }
 }
