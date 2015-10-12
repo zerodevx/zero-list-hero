@@ -43,7 +43,7 @@
     "paper-menu": "PolymerElements/paper-menu#^1.0.0",
     "paper-item": "PolymerElements/paper-item#^1.0.0",
     "paper-toast": "PolymerElements/paper-toast#^1.0.0",
-    "zero-list-hero": "zerodevx/zero-list-hero#^0.2.0"
+    "zero-list-hero": "zerodevx/zero-list-hero#^0.2.1"
   },
   "resolutions": {
     "polymer": "^1.0.0"

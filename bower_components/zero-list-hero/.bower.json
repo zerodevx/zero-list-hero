@@ -1,6 +1,6 @@
 {
   "name": "zero-list-hero",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "authors": [
     "Jason JC Lee <zerodevx@gmail.com>"
   ],
@@ -27,13 +27,13 @@
     "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^1.0.0",
     "polymer-style-modules": "zerodevx/polymer-style-modules#^1.0.0"
   },
-  "_release": "0.2.0",
+  "_release": "0.2.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.2.0",
-    "commit": "378a7cc1e1d96ad348030ec8d786e8e3fe10628d"
+    "tag": "v0.2.1",
+    "commit": "f29afbe41e9ec4731d3b01aabdd1f508b3e4f965"
   },
   "_source": "git://github.com/zerodevx/zero-list-hero.git",
-  "_target": "^0.2.0",
+  "_target": "^0.2.1",
   "_originalSource": "zerodevx/zero-list-hero"
 }
