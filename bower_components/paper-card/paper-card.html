@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 
 <!--
 Material Design: <a href="http://www.google.com/design/spec/components/cards.html">Cards</a>
@@ -25,6 +26,12 @@ Example:
       </div>
     </paper-card>
 
+Example - top card image:
+
+    <paper-card heading="Card Title" image="/path/to/image.png">
+      ...
+    </paper-card>
+    
 ### Accessibility
 
 By default, the `aria-label` will be set to the value of the `heading` attribute.
@@ -60,6 +67,11 @@ Custom property | Description | Default
         background: #fff;
         border-radius: 2px;
         @apply(--paper-card);
+      }
+
+      paper-material {
+        border-radius: inherit;
+        @apply(--layout-fit);
       }
 
       /* IE 10 support for HTML5 hidden attr */
@@ -106,16 +118,14 @@ Custom property | Description | Default
       }
     </style>
 
-    <paper-material id="shadow" animated$="[[animatedShadow]]" elevation=[[elevation]]>
-      <div class="header">
-        <img hidden$="[[!image]]" src="[[image]]">
-        <div hidden$="[[!heading]]" class$="[[_computeHeadingClass(image)]]">[[heading]]</div>
-      </div>
+    <paper-material animated$="[[animatedShadow]]" elevation="[[elevation]]"></paper-material>
 
-      <content></content>
+    <div class="header">
+      <img hidden$="[[!image]]" src="[[image]]">
+      <div hidden$="[[!heading]]" class$="[[_computeHeadingClass(image)]]">[[heading]]</div>
+    </div>
 
-    </paper-material>
-
+    <content></content>
   </template>
 
 </dom-module>

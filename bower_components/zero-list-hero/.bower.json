@@ -1,15 +1,18 @@
 {
   "name": "zero-list-hero",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "authors": [
     "Jason JC Lee <zerodevx@gmail.com>"
   ],
-  "description": "It's hero time! A Polymer 1.0+ web component that hero-animates a sequence of elements.",
+  "description": "It's hero time! A Polymer 1.1+ web component that hero-animates a sequence of elements.",
   "keywords": [
-    "web-component",
+    "web-components",
     "polymer",
+    "neon-animation",
     "hero",
-    "animation"
+    "animations",
+    "layout",
+    "masonry"
   ],
   "main": "zero-list-hero.html",
   "license": "https://github.com/zerodevx/zero-list-hero/blob/master/LICENSE",
@@ -19,16 +22,18 @@
     "/test/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0",
-    "neon-animation": "PolymerElements/neon-animation#^1.0.0"
+    "polymer": "Polymer/polymer#^1.1.0",
+    "neon-animation": "PolymerElements/neon-animation#^1.0.0",
+    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^1.0.0",
+    "polymer-style-modules": "zerodevx/polymer-style-modules#^1.0.0"
   },
-  "_release": "0.1.0",
+  "_release": "0.2.0",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.0",
-    "commit": "418e97bd33b99dda43ea3e4b6097d14e57177ffb"
+    "tag": "v0.2.0",
+    "commit": "378a7cc1e1d96ad348030ec8d786e8e3fe10628d"
   },
   "_source": "git://github.com/zerodevx/zero-list-hero.git",
-  "_target": "^0.1.0",
+  "_target": "^0.2.0",
   "_originalSource": "zerodevx/zero-list-hero"
 }

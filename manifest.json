@@ -1,6 +1,6 @@
 {
-  "name": "<zero-list-hero> Demo Catalogue",
-  "short_name": "<zero-list-hero> Demo Catalogue",
+  "name": "zero-list-hero",
+  "short_name": "zero-list-hero",
   "icons": [{
         "src": "images/zdx_128x128.png",
         "sizes": "128x128",

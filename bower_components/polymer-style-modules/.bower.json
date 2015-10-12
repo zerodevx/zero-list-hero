@@ -1,0 +1,38 @@
+{
+  "name": "polymer-style-modules",
+  "version": "1.0.0",
+  "authors": [
+    "Jason JC Lee <zerodevx@gmail.com>"
+  ],
+  "description": "A style-module implementation of common layout classes for Polymer 1.1+.",
+  "keywords": [
+    "polymer",
+    "web-components",
+    "style-module",
+    "layout",
+    "styles"
+  ],
+  "main": "https://github.com/zerodevx/polymer-style-modules",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zerodevx/polymer-style-modules.git"
+  },
+  "license": "https://github.com/zerodevx/polymer-style-modules/blob/master/LICENSE.txt",
+  "homepage": "https://zerodevx.github.io/polymer-style-modules",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "font-roboto": "PolymerElements/font-robotp^#1.0.0"
+  },
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.0",
+    "commit": "74f25fa900fd8ab639771841286867838210a787"
+  },
+  "_source": "git://github.com/zerodevx/polymer-style-modules.git",
+  "_target": "^1.0.0",
+  "_originalSource": "zerodevx/polymer-style-modules"
+}
