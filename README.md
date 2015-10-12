@@ -1,14 +1,15 @@
-v0.2.0
+v0.2.1
 # `<zero-list-hero>`
 
-It's hero time! A Polymer 1.1+ web component that hero-animates a sequence of
-elements. I do this so you don't have to.
+It's hero time! A Polymer 1.1+ web component that hero-animates and layouts a
+sequence of elements. I do this so you don't have to.
 
 ![demo.gif](https://zerodevx.github.io/zero-list-hero/images/demo.gif)
 
 Featuring:
 * Automatic transitions.
-* Automatic responsive layout - masonry using first-fit algorithm à la Pinterest.
+* NEW! Automatic responsive layout - masonry using first-fit algorithm à la
+Pinterest.
 * Bespoke cascaded entry-exit effects à la Google Play Newsstand App.
 * Built-in debouncer.
 * Configurable animations.
@@ -18,48 +19,48 @@ Featuring:
 ### Let's get this money
 
 1. Import `web-components-lite` polyfill.
-```html
+  ```html
 <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-```
+  ```
 
 2. Import `zero-list-hero` web component.
-```html
+  ```html
 <link rel="import" href="bower_components/zero-list-hero/zero-list-hero.html">
-```
+  ```
 
 3. Profit!
 
   **Basic usage:**
 
   ```html
-  <zero-list-hero>
-    <!-- Dynamically append/remove elements inside here -->
-    ...
-    <div hero-id="hero1">I'm Tom</div>
-    <div hero-id="hero3">I'm Mary</div>
-    <div hero-id="hero2">I'm John</div>
-    ...
-  </zero-list-hero>
+<zero-list-hero>
+  <!-- Dynamically append/remove elements inside here -->
+  ...
+  <div hero-id="hero1">I'm Tom</div>
+  <div hero-id="hero3">I'm Mary</div>
+  <div hero-id="hero2">I'm John</div>
+  ...
+</zero-list-hero>
   ```
 
   **With Polymer's `dom-repeat`:**
 
   ```html
-  <zero-list-hero>
-    <template is="dom-repeat" items="[[list]]">
-      <my-card hero-id$="[[item.foo]]" foo$="[[item.foo]]" bar$="[[item.bar]]"></my-card>
-    </template>
-  </zero-list-hero>
+<zero-list-hero>
+  <template is="dom-repeat" items="[[list]]">
+    <my-card hero-id$="[[item.foo]]" foo$="[[item.foo]]" bar$="[[item.bar]]"></my-card>
+  </template>
+</zero-list-hero>
   ```
 
   **Using built-in responsive masonry layout:**
 
   ```html
-  <zero-list-hero layout="masonry">
-    <template is="dom-repeat" items="[[list]]">
-      <my-card hero-id$="[[item.foo]]" foo$="[[item.foo]]" bar$="[[item.bar]]"></my-card>
-    </template>
-  </zero-list-hero>
+<zero-list-hero layout="masonry">
+  <template is="dom-repeat" items="[[list]]">
+    <my-card hero-id$="[[item.foo]]" foo$="[[item.foo]]" bar$="[[item.bar]]"></my-card>
+  </template>
+</zero-list-hero>
   ```
 
 
@@ -91,7 +92,7 @@ Currently, only *Masonry* layout is shipped. `<zero-list-hero>`'s definition
 of this is a *left-to-right* display of a sequence of *fixed width*, *variable
 height* elements:
 
-![masonry.png](https://zerodevx.github.io/zero-list-hero/images/masonry.png)
+![masonry-demo.png](https://zerodevx.github.io/zero-list-hero/images/masonry-demo.png)
 
 Layout is responsive; bin-packing is based on a first-fit algorithm where the
 next element is placed into the shortest column.
@@ -247,21 +248,37 @@ Retrieval of content nodes will from v0.2.0 onwards will use the normalised
 `domAPI.getDistributedNodes()` method.
 
 
-### Demo
+### Demos
 
-The demo suite is published in https://zerodevx.github.io/zero-list-hero.
+**Simple demo**
 
-Included demos:
+![simple-demo.png](https://zerodevx.github.io/zero-list-hero/images/simple-demo.png)
 
-**Simple demo:** https://zerodevx.github.io/zero-list-hero/simple-demo.html
+https://zerodevx.github.io/zero-list-hero/simple-demo.html
 
-**Demo using `dom-repeat`:** https://zerodevx.github.io/zero-list-hero/dom-repeat-demo.html
+**Demo using `dom-repeat`**
 
-**Demo under native shadow-dom behavior:** https://zerodevx.github.io/zero-list-hero/shadow-demo.html
+![dom-repeat-demo.png](https://zerodevx.github.io/zero-list-hero/images/dom-repeat-demo.png)
 
-**Use in-built masonry layout:** https://zerodevx.github.io/zero-list-hero/masonry-demo.html
+https://zerodevx.github.io/zero-list-hero/dom-repeat-demo.html
 
-**Go crazy with Material Design - a demo Newsreader App:** https://zerodevx.github.io/zero-list-hero/newsreader-demo.html
+**Demo under native shadow-dom behavior**
+
+![shadow-demo.png](https://zerodevx.github.io/zero-list-hero/images/shadow-demo.png)
+
+https://zerodevx.github.io/zero-list-hero/shadow-demo.html
+
+**Use in-built masonry layout**
+
+![masonry-demo.png](https://zerodevx.github.io/zero-list-hero/images/masonry-demo.png)
+
+https://zerodevx.github.io/zero-list-hero/masonry-demo.html
+
+**Go crazy with Material Design - a demo Newsreader App**
+
+![newsreader-demo.png](https://zerodevx.github.io/zero-list-hero/images/newsreader-demo.png)
+
+https://zerodevx.github.io/zero-list-hero/newsreader-demo.html
 
 
 ### Published properties
@@ -296,7 +313,7 @@ Included demos:
 
 Install through bower.
 
-    bower install --save zerodevx/zero-list-hero#^0.2.0
+    bower install --save zerodevx/zero-list-hero#^0.2.1
 
 Alternatively, download the project as a ZIP file and unpack into your
 components directory. `<zero-list-hero>` uses the following:
@@ -333,4 +350,8 @@ MIT, though I'll greatly appreciate a note if you find this useful.
   * Use `<neon-animation>`'s in-built animatable wrapper instead.
   * Improve async dom write timing resolutions.
   * Other performance improvements.
+
+3. 2015-10-12: v0.2.1
+  * Updated README.md.
+  * Cleaned up stray comments in `zero-list-hero.html`.
 
