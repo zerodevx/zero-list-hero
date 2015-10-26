@@ -77,7 +77,7 @@ SOFTWARE.
       <div>
 
         <!-- it's hero time! -->
-        <zero-list-hero id="hero" manual layout="masonry" layoutOptions='{"breakpoint": 360}' debounce-delay="125" cascade-delay="75" on-news-card-fav="favTapped" on-news-card-tapped="itemTapped">
+        <zero-list-hero id="hero" manual layout="masonry" layout-options='{"breakpoint": 360}' debounce-delay="125" cascade-delay="75" on-news-card-fav="favTapped" on-news-card-tapped="itemTapped">
           <template id="repeat" is="dom-repeat" items="{{list}}" sort="sortList">
             <news-card hero-id$="{{item.recent}}" headline$="{{item.headline}}" publisher$="{{item.publisher}}" pic$="{{item.pic}}" recent$="{{item.recent}}" fav$="{{item.fav}}"></news-card>
           </template>
