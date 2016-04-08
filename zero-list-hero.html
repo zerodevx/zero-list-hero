@@ -210,7 +210,7 @@ SOFTWARE.
       },
       _clearPage: function (page) {
         var t = this.$[page];
-        while (Polymer.dom(t).firstChild) { Polymer.dom(t).removeChild(Polymer.dom(t).firstChild); }
+        while (Polymer.dom(t).firstElementChild) { Polymer.dom(t).removeChild(Polymer.dom(t).firstElementChild); }
       },
       _clonePage: function (nodes, page) {
         this._placed = [];
