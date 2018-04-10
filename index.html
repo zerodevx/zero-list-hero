@@ -1,69 +1,44 @@
 <!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="<zero-list-hero>">
-  <meta name="description" content="A Polymer 1.1+ web component that hero-animates and layouts a sequence of elements. I do this so you don't have to.">
-  <meta name="keywords" content="polymer web-components hero animation web-animations neon-animation responsive layout masonry">
-  <title>&lt;zero-list-hero&gt; Instantly publish HTML from Markdown</title>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- The SeriouslyBoring stuff -->
-  <link rel="canonical" href="https://zerodevx.github.io/zero-list-hero">
-  <meta name="theme-color" content="#424242">
-  <link rel="manifest" href="manifest.json">
-  <meta name="msapplication-TileColor" content="#424242">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="<zero-list-hero>">
-  <link rel="icon" sizes="192x192" href="images/zdx_192x192.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="<zero-list-hero>">
-  <link rel="apple-touch-icon" href="images/zdx_144x144.png">
-  <meta name="msapplication-TileImage" content="images/zdx_144x144.png">
+    <!-- Edit your site info here -->
+    <meta name="description" content="A Polymer 1.1+ web component that hero-animates and layouts a sequence of elements. I do this so you don't have to.">
+    <title>&lt;zero-list-hero&gt;</title>
+    <link rel="canonical" href="https://zerodevx.github.io/zero-list-hero">
 
-  <!-- Load components -->
-  <script src="https://cdn.rawgit.com/webcomponents/webcomponentsjs/v0.7.15/webcomponents-lite.min.js"></script>
-  <link rel="import" href="https://cdn.rawgit.com/zerodevx/zero-md/v0.2.0/build/zero-md.html">
-  <link rel="stylesheet" href="https://cdn.rawgit.com/zerodevx/zero-md/v0.2.0/markdown-themes/default.css">
-  <link rel="stylesheet" href="https://cdn.rawgit.com/zerodevx/zero-md/v0.2.0/highlight-themes/default.css">
-</head>
-<body>
-  <style>
-    .header {
-      background-color: #424242;
-      position: fixed;
-      width: 100%;
-      height: 42px;
-      line-height: 42px;
-      top: 0;
-      left: 0;
-      padding: 0 20px;
-    }
-    .title {
-      width: calc(100% - 40px);
-      color: #FFF;
-      font-family: sans-serif;
-      font-size: 20px;
-      text-align: center;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .md-html { min-width: 200px; max-width: 790px; margin: 56px auto 0 auto; padding: 20px; }
-    .md-html img { display: block; margin-left: auto; margin-right: auto; }
-  </style>
-  <div class="header"><div class="title">&lt;zero-list-hero&gt; Instantly Hero-animate and Layout a Sequence of Elements</div></div>
-  <a href="https://github.com/zerodevx/zero-list-hero"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
-  <zero-md file="https://raw.githubusercontent.com/zerodevx/zero-list-hero/master/README.md"><div class="md-html"></div></zero-md>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-loader.js"></script>
+    <link rel="import" href="https://cdn.rawgit.com/zerodevx/zero-md/v1.0.0/build/zero-md.html">
 
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-66946548-1', 'auto');
-    ga('send', 'pageview');
-  </script>
-</body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-66946548-3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-66946548-3');
+    </script>
+  </head>
+  <body>
+    <style>
+      /* Edit your header styles here */
+      header { font-family: sans-serif; font-size: 20px; text-align: center; position: fixed; width: 100%; line-height: 42px; top: 0; left: 0; background-color: #424242; color: white; }
+      zero-md { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 56px auto 0 auto; padding: 45px; }
+      @media (max-width: 767px) {
+		    zero-md { padding: 15px; }
+	    }
+    </style>
+
+    <!-- Edit your Markdown URL source file here -->
+    <zero-md src="https://raw.githubusercontent.com/zerodevx/zero-list-hero/master/README.md"></zero-md>
+
+    <!-- Edit your header title here -->
+    <header class="header">&lt;zero-list-hero&gt;</header>
+
+    <!-- Edit your Github ribbon here (https://github.com/blog/273-github-ribbons) -->
+    <a href="https://github.com/zerodevx/zero-list-hero"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+
+  </body>
 </html>

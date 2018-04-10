@@ -2,7 +2,7 @@
   "name": "zero-list-hero-demos",
   "version": "0.2.1",
   "authors": [
-    "Jason Lee <zerodevx@gmail.com>"
+    "Jason Lee <jason@zerodevx.com>"
   ],
   "description": "Suite of demos for zero-list-hero.",
   "keywords": [
@@ -16,8 +16,8 @@
     "hero-animation"
   ],
   "main": "index.html",
-  "license": "https://github.com/zerodevx/zero-list-hero/blob/master/LICENSE.txt",
-  "homepage": "https://github.com/zerodevx/zero-list-hero/",
+  "license": "MIT",
+  "homepage": "https://github.com/zerodevx/zero-list-hero",
   "ignore": [
     "/.*",
     "/test/"
